@@ -136,6 +136,9 @@ class Game
     if new_game == 'y'
       Game.new
     else
+      puts "More information about this game:\n
+        https://en.wikipedia.org/wiki/Hangman_(game)\n
+        https://www.gutenberg.org/files/41727/41727-h/41727-h.htm#GameI_50\n"
       abort('Thanks for playing! Go learn some more names of birds, beasts and fishes! See you back soon!')
     end
   end
