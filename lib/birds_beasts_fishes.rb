@@ -2,31 +2,74 @@
 
 require 'yaml'
 
-# Hangman game
+# File save and load
+module Files
+  # >5 and <14 because the words include a newline character at the end
+  def sample_word_list
+    File.readlines('word_list.txt').select { |word| word.length > 5 && word.length < 14 }.sample.chomp.upcase.split('')
+  end
+
+  def save
+    File.open('save_game.yml', 'w') { |file| file.write(YAML.dump(self)) }
+    abort 'Game saved!'
+  end
+
+  def delete_file
+    File.delete('save_game.yml')
+  end
+
+  def load_save_game
+    game = YAML.load_file('save_game.yml')
+    delete_file
+    game.draw_hangman
+    game.play
+  end
+
+  def save_game?
+    return unless File.exist?('save_game.yml')
+
+    puts 'Do you want to continue your saved game? (y/n)'
+    if gets.chomp.downcase == 'y'
+      load_save_game
+    else
+      delete_file
+    end
+  end
+end
+
+# Hangman game class
 class Game
+  include Files
+
   def initialize
-    @word = sample_word_list.upcase.split('')
+    save_game?
+    @word = sample_word_list
     @board = Array.new(@word.length, '|_|')
-    @available_letters = [*('A'..'Z')]
+    @available_letters = [*'A'..'Z']
     @turns = 1
     @hangman = 0
     play
+  end
+
+  def play
+    play_turn
+  end
+
+  def draw_hangman
+    puts 'Draw hangman'
+    puts "#{7 - @hangman} lives left"
   end
 
   attr_reader :word, :board, :available_letters
 
   private
 
-  def sample_word_list
-    File.readlines('word_list.txt').select { |word| word.length > 5 && word.length < 14 }.sample.chomp
-  end
-
-  def play
+  def play_turn
     display_state
     evaluate(guess)
     draw_hangman
     @turns += 1
-    play
+    play_turn
   end
 
   def display_state
@@ -46,11 +89,6 @@ class Game
       puts 'Please type a letter that is still available:'
       guess
     end
-  end
-
-  def draw_hangman
-    puts 'Draw hangman'
-    puts "#{7 - @hangman} lives left"
   end
 
   def evaluate(guess)
@@ -84,13 +122,6 @@ class Game
     else
       abort('Thanks for playing! Go learn some more names of birds, beasts and fishes! See you back soon!')
     end
-  end
-
-  def save
-    # dump = YAML.dump(self)
-    # puts dump
-    abort('game saved!')
-    # YAML.load(dump)
   end
 end
 
