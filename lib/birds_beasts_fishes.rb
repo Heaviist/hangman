@@ -2,6 +2,20 @@
 
 require 'yaml'
 
+# Methods that help drawing the current hangman state
+module Hangman
+  def hangman
+    puts ' _____'
+    puts ' |/  |'
+    puts " |   #{'O' if @hangman >= 1}"
+    puts " |  #{' |' if @hangman.between?(2, 3)}#{'\|' if @hangman == 4}#{'\|/' if @hangman >= 5}"
+    puts " |   #{'|' if @hangman >= 3}"
+    puts " |  #{'/' if @hangman == 6}#{'/ \\' if @hangman == 7}"
+    puts ' |'
+    puts '/|\______'
+  end
+end
+
 # File save and load
 module Files
   # >5 and <14 because the words include a newline character at the end
@@ -40,6 +54,7 @@ end
 # Hangman game class
 class Game
   include Files
+  include Hangman
 
   def initialize
     save_game?
@@ -56,8 +71,8 @@ class Game
   end
 
   def draw_hangman
-    puts 'Draw hangman'
-    puts "#{7 - @hangman} lives left"
+    hangman
+    puts "#{7 - @hangman} lives left\n\n"
   end
 
   attr_reader :word, :board, :available_letters
@@ -75,7 +90,7 @@ class Game
   def display_state
     puts "Turn ##{@turns}. The word consists of #{@word.length} letters:\n"
     puts @board.join(' ')
-    puts "\nThese are the remaining letters to chose from:\n#{@available_letters.join(' ')}"
+    puts "\nThese are the remaining letters to chose from:\n#{@available_letters.join(' ')}\n\n"
     puts "Please enter your next guess (type 'exit' to save the game for later):"
   end
 
@@ -109,6 +124,7 @@ class Game
       puts "You've guessed the word: #{word}"
       new_game
     elsif @hangman == 7
+      draw_hangman
       puts "You've lost the game! The word was: #{word}"
       new_game
     end
