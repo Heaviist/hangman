@@ -22,7 +22,13 @@ Building a simple command line Hangman game where one player plays against the c
 4. Restarting the saved game seems trivial once the hurdles from 3. have been overcome.
 
 # Results and Evaluation
-To be added later.
+- Program has all the necessary funcionality.
+1. Basically it was.
+2. Turns out, some patience gets you there for drawing a rudimentary hangman.
+3. I let this concept sink in for a couple days, then decided to try out the intuitive approach. I'm somewhat surprised that it works the way it does, as the given examples seemed to make things more complicated. Will probably have some small struggles with this later.
+4. Yes and no. Reading is obvious, but it took some careful consideration to make sure the game would not break when trying to read a previous save_game.
 
 # Notes for future revisiting
-To be added later.
+- Might be nice to try to clean it all up a bit more. It feels like it's been adding a lot on the go and not looking back much. Felt good, but not sure how readable the code is when I get back to it later.
+- Would be fun to somehow turn this into something more graphical/UI based.
+- I guess some overall styling could also be added to the command line version, though I tend to give a lot of information to work with, so maybe not...
